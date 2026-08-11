@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Panchi Urr Cyber Edition</title>
+  <!--Fonts bhalo ache but no too good -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- connection with style -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app-container">
+    <!-- Game kapor -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- oporer In-Game HUD -->
+    <div id="game-hud" class="hud-overlay hidden">
+      <div class="hud-left">
+        <div class="hud-badge mode-badge" id="hud-mode-display">MEDIUM</div>
+        <div class="hud-badge fps-badge" id="hud-fps-display">360 FPS</div>
+      </div>
+      <div class="hud-center">
+        <div id="hud-score">0</div>
+        <div id="hud-combo" class="hidden">2x COMBO!</div>
+      </div>
+      <div class="hud-right">
+        <button id="btn-sound" class="icon-btn" title="Toggle Sound">
+          <svg id="icon-sound-on" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="icon-sound-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="btn-pause" class="icon-btn" title="Pause Game (P)">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Menu Overlay -->
+    <div id="menu-overlay" class="overlay">
+      <div class="glass-card menu-card">
+        <div class="brand">
+          <div class="logo-glow"></div>
+          <h1 class="game-title">PANCHI<span class="highlight">URR</span></h1>
+          <p class="tagline">Panchi ko urao • Smooth</p>
+        </div>
+
+        <!-- level to sabke lagenge -->
+        <div class="section-title">SELECT DIFFICULTY MODE</div>
+        <div class="difficulty-grid">
+          <button class="mode-card" data-mode="easy">
+            <div class="mode-header">
+              <span class="mode-icon">🌱</span>
+              <span class="mode-name">EASY</span>
+            </div>
+            <div class="mode-desc">Wide Gaps • Slow Pace • Gentle Physics</div>
+            <div class="mode-stat">High Score: <span id="hs-easy">0</span></div>
+          </button>
+
+          <button class="mode-card active" data-mode="medium">
+            <div class="mode-header">
+              <span class="mode-icon">⚡</span>
+              <span class="mode-name">MEDIUM</span>
+            </div>
+            <div class="mode-desc">Classic Feel • Balanced Challenge</div>
+            <div class="mode-stat">High Score: <span id="hs-medium">0</span></div>
+          </button>
+
+          <button class="mode-card" data-mode="hard">
+            <div class="mode-header">
+              <span class="mode-icon">🔥</span>
+              <span class="mode-name">HARD</span>
+            </div>
+            <div class="mode-desc">Tight Gaps • Moving Pipes • Snappy Gravity</div>
+            <div class="mode-stat">High Score: <span id="hs-hard">0</span></div>
+          </button>
+
+          <button class="mode-card extreme" data-mode="extreme">
+            <div class="mode-header">
+              <span class="mode-icon">☠️</span>
+              <span class="mode-name">EXTREME</span>
+            </div>
+            <div class="mode-desc">Hyper Speed • pass if you're able to </div>
+            <div class="mode-stat">High Score: <span id="hs-extreme">0</span></div>
+          </button>
+        </div>
+
+        <!-- Bird Skin  -->
+        <div class="section-title">CHOOSE CYBER BIRD SKIN</div>
+        <div class="skin-selector">
+          <button class="skin-btn active" data-skin="cyan">
+            <span class="skin-preview skin-cyan"></span>
+            <span>CYAN NEON</span>
+          </button>
+          <button class="skin-btn" data-skin="phoenix">
+            <span class="skin-preview skin-phoenix"></span>
+            <span>PHOENIX FIRE</span>
+          </button>
+          <button class="skin-btn" data-skin="plasma">
+            <span class="skin-preview skin-plasma"></span>
+            <span>PLASMA PURPLE</span>
+          </button>
+          <button class="skin-btn" data-skin="matrix">
+            <span class="skin-preview skin-matrix"></span>
+            <span>MATRIX GREEN</span>
+          </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+          <button id="btn-start" class="btn primary-btn">START GAME</button>
+        </div>
+
+        <!-- Controls Hint -->
+        <div class="controls-hint">
+          <span>PRESS <strong>SPACEBAR</strong> / <strong>CLICK</strong> / <strong>TAP</strong> TO FLAP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause Menu Overlay -->
+    <div id="pause-overlay" class="overlay hidden">
+      <div class="glass-card dialog-card">
+        <h2>GAME PAUSED</h2>
+        <p class="pause-subtitle">Take a breather, champ!</p>
+        <div class="dialog-actions">
+          <button id="btn-resume" class="btn primary-btn">RESUME (P)</button>
+          <button id="btn-restart-pause" class="btn secondary-btn">RESTART</button>
+          <button id="btn-menu-pause" class="btn outline-btn">MAIN MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div id="gameover-overlay" class="overlay hidden">
+      <div class="glass-card dialog-card gameover-card">
+        <div class="gameover-badge" id="gameover-rank">NEW BEST!</div>
+        <h2 class="gameover-title">CRASHED!</h2>
+
+        <div class="stats-panel">
+          <div class="stat-box">
+            <span class="stat-label">SCORE</span>
+            <span class="stat-value" id="go-score">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">BEST (<span id="go-mode-label">MEDIUM</span>)</span>
+            <span class="stat-value highlight" id="go-best">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">SURVIVAL TIME</span>
+            <span class="stat-value" id="go-time">0s</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">MAX COMBO</span>
+            <span class="stat-value" id="go-combo">0x</span>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button id="btn-play-again" class="btn primary-btn">PLAY AGAIN</button>
+          <button id="btn-change-mode" class="btn secondary-btn">CHANGE MODE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="audio.js"></script>
+  <script src="physics.js"></script>
+  <script src="renderer.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
