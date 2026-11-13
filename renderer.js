@@ -3,29 +3,29 @@
 class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d', { alpha: false }); // Optimize for non-transparent canvas performance
+    this.ctx = canvas.getContext('2d', { alpha: false }); 
 
     this.width = 0;
     this.height = 0;
     this.dpr = 1;
     this.groundHeight = 110;
 
-    // Detect mobile or small screen
+ 
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                     (window.innerWidth <= 768) || 
                     ('ontouchstart' in window);
 
-    // Parallax scroll offsets
+   
     this.bgStarsOffset = 0;
     this.bgSkylineOffset = 0;
     this.bgGridOffset = 0;
     this.groundOffset = 0;
 
-    // Particles
+  
     this.particles = [];
     this.floaters = [];
 
-    // Skyline buildings
+   
     this.buildings = [];
     
     this.resize();
@@ -37,7 +37,7 @@ class Renderer {
                     (window.innerWidth <= 768) || 
                     ('ontouchstart' in window);
 
-    // Cap DPR on mobile screens to avoid massive 4k canvas fill-rate lag
+   
     const maxDPR = this.isMobile ? 1.25 : 1.5;
     this.dpr = Math.min(window.devicePixelRatio || 1, maxDPR);
 
@@ -95,13 +95,13 @@ class Renderer {
     this.groundOffset = (this.groundOffset + pipeSpeed * dt) % 40;
   }
 
-  // Draw background sky & skyline
+
   drawBackground() {
     const ctx = this.ctx;
     const w = this.width;
     const h = this.height;
 
-    // Sky gradient
+   
     const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
     skyGrad.addColorStop(0, '#060814');
     skyGrad.addColorStop(0.6, '#0f172a');
@@ -109,7 +109,7 @@ class Renderer {
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, w, h);
 
-    // Horizon & Cyber Buildings
+   
     ctx.save();
     const horizonY = h - this.groundHeight;
     const buildingBaseY = horizonY;
@@ -141,7 +141,7 @@ class Renderer {
     ctx.restore();
   }
 
-  // Draw ground
+  
   drawGround() {
     const ctx = this.ctx;
     const w = this.width;
@@ -154,7 +154,7 @@ class Renderer {
     ctx.fillStyle = groundGrad;
     ctx.fillRect(0, groundY, w, this.groundHeight);
 
-    // Top border line
+    
     ctx.strokeStyle = '#00f3ff';
     ctx.lineWidth = 3;
     if (!this.isMobile) {
@@ -169,7 +169,7 @@ class Renderer {
       ctx.shadowBlur = 0;
     }
 
-    // Grid lines
+    
     ctx.strokeStyle = 'rgba(0, 243, 255, 0.2)';
     ctx.lineWidth = 1;
 
@@ -191,7 +191,7 @@ class Renderer {
     }
   }
 
-  // Draw pipes
+
   drawPipes(pipes, mode) {
     const ctx = this.ctx;
     const worldH = this.height;
@@ -266,7 +266,7 @@ class Renderer {
       drawSinglePipe(pipeX, 0, pipeW, topPipeBottom, true);
       drawSinglePipe(pipeX, bottomPipeTop, pipeW, bottomPipeHeight, false);
 
-      // Extreme laser beam
+  
       if (pipe.hasLaser && pipe.laserState) {
         ctx.save();
         const laserX = pipeX + pipeW / 2;
@@ -297,14 +297,14 @@ class Renderer {
     });
   }
 
-  // Draw bird
+ 
   drawBird(bird, skin) {
     const ctx = this.ctx;
     ctx.save();
     ctx.translate(bird.x, bird.y);
     ctx.rotate((bird.rotation * Math.PI) / 180);
 
-    // Skin Color Setup
+  
     let primaryColor = '#00f3ff';
     let secondaryColor = '#0088ff';
     let trailGlow = '#00f3ff';
@@ -323,13 +323,13 @@ class Renderer {
       trailGlow = '#00ff66';
     }
 
-    // Bird Outer Aura Glow (Lightened blur for high FPS)
+    
     if (!this.isMobile) {
       ctx.shadowColor = trailGlow;
       ctx.shadowBlur = 10;
     }
 
-    // Body Capsule / Oval
+
     const bodyGrad = ctx.createRadialGradient(-4, -4, 2, 0, 0, bird.radius);
     bodyGrad.addColorStop(0, '#ffffff');
     bodyGrad.addColorStop(0.4, primaryColor);
@@ -340,12 +340,12 @@ class Renderer {
     ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Outer cyber ring border
+    
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Cyber Eye Visor
+    
     ctx.fillStyle = '#0f172a';
     ctx.beginPath();
     ctx.ellipse(6, -5, 7, 5, 0, 0, Math.PI * 2);
@@ -356,7 +356,7 @@ class Renderer {
     ctx.arc(8, -5, 3, 0, Math.PI * 2);
     ctx.fill();
 
-    // Animated Wing Flap
+ 
     const wingY = Math.sin(bird.wingPhase * Math.PI * 2) * 8;
     ctx.fillStyle = secondaryColor;
     ctx.strokeStyle = '#ffffff';
@@ -366,7 +366,7 @@ class Renderer {
     ctx.fill();
     ctx.stroke();
 
-    // Cyber Beak
+   
     ctx.fillStyle = '#ffd700';
     ctx.beginPath();
     ctx.moveTo(bird.radius - 2, 0);
@@ -378,10 +378,10 @@ class Renderer {
     ctx.restore();
   }
 
-  // Add trail particle from bird position
+
   spawnTrailParticle(bird, skin) {
     const maxParticles = this.isMobile ? 40 : 120;
-    if (this.particles.length >= maxParticles) return; // Cap active particle pool for mobile
+    if (this.particles.length >= maxParticles) return; 
 
     let color = '#00f3ff';
     if (skin === 'phoenix') color = '#ff8800';
@@ -400,7 +400,7 @@ class Renderer {
     });
   }
 
-  // Burst explosion on crash
+
   spawnExplosion(x, y, count = 30) {
     const maxCount = this.isMobile ? 20 : count;
     const colors = ['#ff007f', '#00f3ff', '#ffd700', '#ffffff'];
@@ -420,9 +420,9 @@ class Renderer {
     }
   }
 
-  // Floating score popups (+1, COMBO!, MILESTONE!)
+ 
   spawnFloater(x, y, text, color = '#ffd700') {
-    if (this.floaters.length > 15) this.floaters.shift(); // Bound floaters pool
+    if (this.floaters.length > 15) this.floaters.shift(); 
     this.floaters.push({
       x: x,
       y: y,
@@ -436,7 +436,7 @@ class Renderer {
   updateAndDrawParticles(dt) {
     const ctx = this.ctx;
 
-    // Render Trail / Explosion Particles (Optimized: NO shadowBlur per particle!)
+   
     for (let i = this.particles.length - 1; i >= 0; i--) {
       const p = this.particles[i];
       p.life -= dt;
@@ -457,7 +457,7 @@ class Renderer {
     }
     ctx.globalAlpha = 1.0;
 
-    // Render Floating Text
+ 
     for (let i = this.floaters.length - 1; i >= 0; i--) {
       const f = this.floaters[i];
       f.life -= dt;
@@ -466,7 +466,7 @@ class Renderer {
         continue;
       }
 
-      f.y -= 45 * dt; // float up
+      f.y -= 45 * dt; 
       const alpha = f.life / f.maxLife;
 
       ctx.save();
