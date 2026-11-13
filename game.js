@@ -6,12 +6,12 @@ class GameController {
     this.physics = new PhysicsEngine();
     this.renderer = new Renderer(this.canvas);
 
-    // State: 'MENU' | 'PLAYING' | 'PAUSED' | 'GAMEOVER'
+
     this.state = 'MENU';
     this.difficultyMode = 'medium';
     this.selectedSkin = 'cyan';
 
-    // Player & Entities
+  
     this.bird = {
       x: 120,
       y: 300,
@@ -27,14 +27,14 @@ class GameController {
     this.maxCombo = 0;
     this.flapsCount = 0;
 
-    // Timers
+  
     this.lastTime = performance.now();
     this.gameTime = 0;
     this.pipeSpawnTimer = 0;
     this.trailTimer = 0;
     this.fpsUpdateTimer = 0;
 
-    // Local Storage High Scores
+
     this.highScores = {
       easy: parseInt(localStorage.getItem('fb360_hs_easy') || '0', 10),
       medium: parseInt(localStorage.getItem('fb360_hs_medium') || '0', 10),
@@ -42,7 +42,7 @@ class GameController {
       extreme: parseInt(localStorage.getItem('fb360_hs_extreme') || '0', 10)
     };
 
-    // FPS counter
+
     this.fpsFrameTimes = [];
     this.fps = 60;
 
@@ -50,7 +50,7 @@ class GameController {
     this.initEventListeners();
     this.loadHighScores();
 
-    // Start loop
+ 
     requestAnimationFrame((t) => this.loop(t));
   }
 
@@ -103,10 +103,10 @@ class GameController {
   }
 
   initEventListeners() {
-    // Window Resize
+    
     window.addEventListener('resize', () => this.renderer.resize());
 
-    // Controls: Spacebar / Arrow Up / Key W / Key P / Escape
+   
     window.addEventListener('keydown', (e) => {
       if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
         e.preventDefault();
@@ -117,9 +117,9 @@ class GameController {
       }
     });
 
-    // Touch & Canvas Pointer input (Instant 0ms latency for mobile)
+   
     const onCanvasTouch = (e) => {
-      // Avoid flap if clicking top HUD controls
+     
       const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
       const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
       if (clientY < 70 && clientX > this.renderer.width - 120) return;
@@ -131,7 +131,7 @@ class GameController {
     this.canvas.addEventListener('pointerdown', onCanvasTouch, { passive: false });
     this.canvas.addEventListener('touchstart', onCanvasTouch, { passive: false });
 
-    // Mode Selector buttons
+    
     this.ui.modeCards.forEach(card => {
       card.addEventListener('click', () => {
         audio.playClick();
@@ -142,7 +142,7 @@ class GameController {
       });
     });
 
-    // Skin selector buttons
+  
     this.ui.skinBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         audio.playClick();
@@ -152,13 +152,12 @@ class GameController {
       });
     });
 
-    // Start Game Button
+  
     this.ui.btnStart.addEventListener('click', () => {
       audio.playClick();
       this.startGame();
     });
 
-    // HUD Pause & Sound buttons
     this.ui.btnPause.addEventListener('click', (e) => {
       e.stopPropagation();
       audio.playClick();
@@ -178,7 +177,7 @@ class GameController {
       }
     });
 
-    // Pause Modal Buttons
+ 
     this.ui.btnResume.addEventListener('click', () => {
       audio.playClick();
       this.resumeGame();
@@ -196,7 +195,7 @@ class GameController {
       this.showMenu();
     });
 
-    // Game Over Buttons
+  
     this.ui.btnPlayAgain.addEventListener('click', () => {
       audio.playClick();
       this.ui.gameoverOverlay.classList.add('hidden');
@@ -211,7 +210,7 @@ class GameController {
   }
 
   handleFlapInput() {
-    audio.playMusic(); // Ensures background music starts on first user gesture
+    audio.playMusic(); 
     if (this.state === 'PLAYING') {
       this.physics.flap(this.bird);
       this.flapsCount++;
@@ -242,10 +241,10 @@ class GameController {
     this.combo = 0;
     this.maxCombo = 0;
     this.flapsCount = 0;
-    this.pipeSpawnTimer = 0.5; // Spawn first pipe quickly
+    this.pipeSpawnTimer = 0.5; 
     this.gameTime = 0;
 
-    // HUD Update
+   
     this.ui.hudScore.textContent = '0';
     this.ui.hudCombo.classList.add('hidden');
     this.ui.hudMode.textContent = this.difficultyMode.toUpperCase();
@@ -314,10 +313,10 @@ class GameController {
     this.state = 'GAMEOVER';
     audio.playHit();
 
-    // Trigger visual particle explosion at bird position
+
     this.renderer.spawnExplosion(this.bird.x, this.bird.y, 35);
 
-    // Save High Score for current mode
+    
     const currentMode = this.difficultyMode;
     const isNewBest = this.score > this.highScores[currentMode];
     if (isNewBest) {
@@ -326,11 +325,11 @@ class GameController {
       audio.playFanfare();
     }
 
-    // Format endless survival time
+    
     const timeSecs = Math.floor(this.gameTime);
     const timeFormatted = timeSecs >= 60 ? `${Math.floor(timeSecs / 60)}m ${timeSecs % 60}s` : `${timeSecs}s`;
 
-    // Populate Game Over Stats Card
+
     this.ui.goRank.textContent = isNewBest ? '🏆 NEW BEST ENDLESS RECORD!' : 'CRASH REPORT';
     this.ui.goRank.style.background = isNewBest ? 'linear-gradient(135deg, #ffd700, #ff8800)' : 'rgba(255, 0, 127, 0.2)';
     this.ui.goScore.textContent = this.score;
@@ -339,27 +338,27 @@ class GameController {
     this.ui.goTime.textContent = timeFormatted;
     this.ui.goCombo.textContent = `${this.maxCombo}x`;
 
-    // Show Game Over Overlay after short delay for impact
+
     setTimeout(() => {
       this.ui.gameoverOverlay.classList.remove('hidden');
     }, 400);
   }
 
-  // Main loop
+
   loop(currentTime) {
     const rawDt = (currentTime - this.lastTime) / 1000;
     this.lastTime = currentTime;
 
-    // Clamp dt to 50ms to prevent giant leaps if tab loses focus
+  
     const dt = Math.min(rawDt, 0.05);
 
-    // Measure FPS rolling average
+  
     this.fpsFrameTimes.push(currentTime);
     while (this.fpsFrameTimes.length > 0 && this.fpsFrameTimes[0] <= currentTime - 1000) {
       this.fpsFrameTimes.shift();
     }
 
-    // Throttle DOM update for FPS to twice per second (prevents layout thrashing)
+    
     this.fpsUpdateTimer += dt;
     if (this.fpsUpdateTimer >= 0.5) {
       this.fps = this.fpsFrameTimes.length;
@@ -367,34 +366,33 @@ class GameController {
       this.fpsUpdateTimer = 0;
     }
 
-    // State Updates
+
     if (this.state === 'PLAYING') {
       this.gameTime += dt;
       this.pipeSpawnTimer += dt;
       this.trailTimer += dt;
 
-      // Spawn pipes based on difficulty spawn interval
+   
       if (this.pipeSpawnTimer >= this.physics.config.spawnInterval) {
         this.spawnPipe();
         this.pipeSpawnTimer = 0;
       }
 
-      // Update Bird Physics
+     
       this.physics.updateBird(this.bird, dt);
       this.bird.wingPhase = (this.bird.wingPhase + dt * 6) % 1.0;
 
-      // Spawn particle trails behind bird (adjust interval for mobile vs desktop)
+      
       const trailInterval = this.renderer.isMobile ? 0.05 : 0.03;
       if (this.trailTimer > trailInterval) {
         this.renderer.spawnTrailParticle(this.bird, this.selectedSkin);
         this.trailTimer = 0;
       }
 
-      // Update Pipes with dynamic endless speed scaling
+
       const effectiveSpeed = this.physics.getEffectiveSpeed(this.score);
       this.physics.updatePipes(this.pipes, dt, this.renderer.height, this.gameTime, this.score);
 
-      // Remove offscreen pipes & check passed score
       for (let i = this.pipes.length - 1; i >= 0; i--) {
         const pipe = this.pipes[i];
         if (!pipe.passed && pipe.x + pipe.width < this.bird.x) {
@@ -402,7 +400,7 @@ class GameController {
           this.combo++;
           if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-          // Points scored with multiplier
+        
           const pts = Math.round(1 * this.physics.config.scoreMultiplier);
           const oldScore = this.score;
           this.score += pts;
@@ -410,10 +408,10 @@ class GameController {
 
           this.ui.hudScore.textContent = this.score;
 
-          // Show floating text
+      
           this.renderer.spawnFloater(this.bird.x + 20, this.bird.y - 30, `+${pts}`);
 
-          // Endless Score Milestone Celebrations (every 10 points)
+      
           if (Math.floor(this.score / 10) > Math.floor(oldScore / 10)) {
             const milestone = Math.floor(this.score / 10) * 10;
             this.renderer.spawnFloater(this.renderer.width / 2, 140, `🔥 MILESTONE: ${milestone}!`, '#00f3ff');
@@ -431,7 +429,7 @@ class GameController {
         }
       }
 
-      // Check Collisions
+     
       const collision = this.physics.checkCollisions(
         this.bird,
         this.pipes,
@@ -444,11 +442,11 @@ class GameController {
         this.gameOver(collision.cause);
       }
 
-      // Parallax Background Update with dynamic endless speed
+    
       this.renderer.updateParallax(dt, effectiveSpeed);
 
     } else if (this.state === 'MENU') {
-      // Gentle floating animation for bird on Menu Screen
+    
       this.gameTime += dt;
       this.bird.y = this.renderer.height * 0.42 + Math.sin(this.gameTime * 3) * 12;
       this.bird.rotation = Math.sin(this.gameTime * 2) * 8;
@@ -456,19 +454,19 @@ class GameController {
       this.renderer.updateParallax(dt, 80);
     }
 
-    // Canvas Rendering Pass
+ 
     this.renderer.drawBackground();
     this.renderer.drawPipes(this.pipes, this.difficultyMode);
     this.renderer.drawGround();
     this.renderer.drawBird(this.bird, this.selectedSkin);
     this.renderer.updateAndDrawParticles(dt);
 
-    // Request Next Frame
+  
     requestAnimationFrame((t) => this.loop(t));
   }
 }
 
-// Instantiate Game on DOM Load
+
 window.addEventListener('DOMContentLoaded', () => {
   window.game = new GameController();
 });
