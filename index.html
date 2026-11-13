@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Panchi Urr Cyber Edition</title>
-  <!--Fonts bhalo ache but no too good -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <!-- connection with style -->
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app-container">
-    <!-- Game kapor -->
+   
     <canvas id="game-canvas"></canvas>
 
-    <!-- oporer In-Game HUD -->
+
     <div id="game-hud" class="hud-overlay hidden">
       <div class="hud-left">
         <div class="hud-badge mode-badge" id="hud-mode-display">MEDIUM</div>
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <!-- Main Menu Overlay -->
+  
     <div id="menu-overlay" class="overlay">
       <div class="glass-card menu-card">
         <div class="brand">
@@ -46,7 +46,6 @@
           <p class="tagline">Panchi ko urao • Smooth</p>
         </div>
 
-        <!-- level to sabke lagenge -->
         <div class="section-title">SELECT DIFFICULTY MODE</div>
         <div class="difficulty-grid">
           <button class="mode-card" data-mode="easy">
@@ -86,7 +85,7 @@
           </button>
         </div>
 
-        <!-- Bird Skin  -->
+    
         <div class="section-title">CHOOSE CYBER BIRD SKIN</div>
         <div class="skin-selector">
           <button class="skin-btn active" data-skin="cyan">
@@ -107,19 +106,19 @@
           </button>
         </div>
 
-        <!-- Action Buttons -->
+     
         <div class="action-bar">
           <button id="btn-start" class="btn primary-btn">START GAME</button>
         </div>
 
-        <!-- Controls Hint -->
+        
         <div class="controls-hint">
           <span>PRESS <strong>SPACEBAR</strong> / <strong>CLICK</strong> / <strong>TAP</strong> TO FLAP</span>
         </div>
       </div>
     </div>
 
-    <!-- Pause Menu Overlay -->
+   
     <div id="pause-overlay" class="overlay hidden">
       <div class="glass-card dialog-card">
         <h2>GAME PAUSED</h2>
@@ -132,7 +131,7 @@
       </div>
     </div>
 
-    <!-- Game Over Overlay -->
+    
     <div id="gameover-overlay" class="overlay hidden">
       <div class="glass-card dialog-card gameover-card">
         <div class="gameover-badge" id="gameover-rank">NEW BEST!</div>
@@ -165,7 +164,7 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+
   <script src="audio.js"></script>
   <script src="physics.js"></script>
   <script src="renderer.js"></script>
