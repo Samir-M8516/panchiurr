@@ -5,7 +5,7 @@ class SoundEngine {
     this.muted = false;
     this.initialized = false;
     
-    // Background music track
+  
     this.bgMusic = new Audio('the_mountain-game-game-music-508018 (1).mp3');
     this.bgMusic.loop = true;
     this.bgMusic.volume = 0.4;
@@ -35,7 +35,7 @@ class SoundEngine {
     if (this.muted) return;
     this.ensureContext();
     this.bgMusic.play().catch(err => {
-      // autoplay blocked until user tap/click
+
       console.log("Music waiting for gesture:", err);
     });
   }
@@ -72,7 +72,7 @@ class SoundEngine {
     osc.type = 'sine';
     const now = this.ctx.currentTime;
     
-    // flap swoop sound
+   
     osc.frequency.setValueAtTime(320, now);
     osc.frequency.exponentialRampToValueAtTime(680, now + 0.08);
 
@@ -93,7 +93,7 @@ class SoundEngine {
 
     const now = this.ctx.currentTime;
 
-    // score chime
+ 
     [659.25, 987.77].forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -119,7 +119,7 @@ class SoundEngine {
 
     const now = this.ctx.currentTime;
 
-    // thud sound
+   
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
@@ -136,7 +136,7 @@ class SoundEngine {
     osc.start(now);
     osc.stop(now + 0.26);
 
-    // noise burst impact
+ 
     this.playNoise(now, 0.2, 0.3);
   }
 
